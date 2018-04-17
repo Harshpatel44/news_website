@@ -3,7 +3,7 @@ __author__ = 'harsh'
 import urllib2
 import json
 import time
-
+from bs4 import BeautifulSoup
 key="0fc0e9b54d5d4389b807d66a86fcee50"
 the_hindu_url="http://newsapi.org/v2/top-headlines?country=in&apiKey=0fc0e9b54d5d4389b807d66a86fcee50"
 google_news_url="http://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=0fc0e9b54d5d4389b807d66a86fcee50"
@@ -12,35 +12,72 @@ business_url="http://newsapi.org/v2/top-headlines?country=in&category=business&a
 sports_url="http://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=0fc0e9b54d5d4389b807d66a86fcee50"
 tech_url="http://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=0fc0e9b54d5d4389b807d66a86fcee50"
 entertainment_url="http://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=0fc0e9b54d5d4389b807d66a86fcee50"
+politics="http://news.google.com/news/headlines/section/topic/POLITICS.en_in/Politics?ned=in&hl=en-IN&gl=IN"
+world="https://news.google.com/news/headlines/section/topic/WORLD.en_in/World?ned=in&hl=en-IN&gl=IN"
 
 topics=[]
-content={}
-topics.extend((the_hindu_url,business_url,sports_url,tech_url,entertainment_url))
-for i in topics:
-    data=urllib2.urlopen(i)
-    json_data=json.load(data)
-    print(json_data)
-    if(i==the_hindu_url):
-        #content['top']=json_data
-        f=open('json/top.json','w')
-        json.dump(json_data,f)
-    elif(i==business_url):
-        # content['business']=json_data
-        f=open('json/business.json','w')
-        json.dump(json_data,f)
-    elif(i==sports_url):
-        # content['sports']=json_data
-        f=open('json/sports.json','w')
-        json.dump(json_data,f)
-    elif(i==tech_url):
-        # content['tech']=json_data
-        f=open('json/tech.json','w')
-        json.dump(json_data,f)
-    elif(i==entertainment_url):
-        # content['entertainment']=json_data
-        f=open('json/entertainment.json','w')
-        json.dump(json_data,f)
+topics.extend((the_hindu_url,business_url,sports_url,tech_url,entertainment_url,politics,world))
+while(1):
 
+    for i in topics:
+        data=urllib2.urlopen(i)
+
+
+        if(i==the_hindu_url):
+            json_data=json.load(data)
+            #content['top']=json_data
+            f=open('json/top.json','w')
+            json.dump(json_data,f)
+        elif(i==business_url):
+            json_data=json.load(data)
+            # content['business']=json_data
+            f=open('json/business.json','w')
+            json.dump(json_data,f)
+        elif(i==sports_url):
+            json_data=json.load(data)
+            # content['sports']=json_data
+            f=open('json/sports.json','w')
+            json.dump(json_data,f)
+        elif(i==tech_url):
+            json_data=json.load(data)
+            # content['tech']=json_data
+            f=open('json/tech.json','w')
+            json.dump(json_data,f)
+        elif(i==entertainment_url):
+            json_data=json.load(data)
+            # content['entertainment']=json_data
+            f=open('json/entertainment.json','w')
+            json.dump(json_data,f)
+        elif(i==politics or i==world):
+            list=[]
+            response=urllib2.urlopen(i)
+            soup=BeautifulSoup(response,"html.parser")
+            for j in soup.find_all('div',attrs={'class':'qx0yFc'}):
+
+
+            # image=i.find('a',attts={'class':'MWG8ab'})
+            # print(image)
+            # print(image.get('href'))
+            # exact_img=image.find('img',attrs={'class':'lmFAjc'})
+            # print(exact_img.get('src'))
+
+
+
+                content=j.find('a',attrs={'class':"nuEeue hzdq5d ME7ew"})
+                # print(content)
+                try:
+                    image=j.img['src']
+                    list.append([content.text,content.get('href'),j.img['src']])
+                except:
+                    list.append([content.text,content.get('href')])
+            # print(list)
+            if(i==politics):
+                f=open('json/politics.json','w')
+                json.dump(list,f)
+            elif(i==world):
+                f=open('json/world.json','w')
+                json.dump(list,f)
+    time.sleep(30)
 
     #print(json_data)
 # print(content[['articles'][0]['title'])  #to access the content
