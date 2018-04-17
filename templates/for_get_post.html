@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h6 id="0"></h6>
+<p id="1"></p>
+<p id="2"></p>
+<p id="3"></p>
+<p id="4"></p>
+<p id="5"></p>
+
+<script>
+    function f() {
+        $.getJSON('/data', function (data) {
+//                    var obj=JSON.parse(data)
+//                    alert(toString(obj))
+                    for(var i=0;i<10;i++) {
+                        document.getElementById(i.toString()).innerHTML = JSON.stringify(data[1]['articles'][0]['title']);
+//                        document.getElementById('1').innerHTML = data[1];
+                    }
+//                    document.getElementById('2').innerHTML = data[2];
+//                    document.getElementById('3').innerHTML = data[3];
+//                    document.getElementById('4').innerHTML = data[4];
+//                    document.getElementById('5').innerHTML = data[5];
+
+                }
+            );
+
+    }
+
+</script>
+
+</body>
+<Button onClick="f()">Click</Button>
+</html>
