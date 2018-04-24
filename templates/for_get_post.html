@@ -6,6 +6,7 @@
     <title></title>
 </head>
 <body>
+<div id="harsh"></div>
 <h6 id="0"></h6>
 <p id="1"></p>
 <p id="2"></p>
@@ -15,11 +16,11 @@
 
 <script>
     function f() {
-        $.getJSON('/world', function (data) {
+        $.getJSON('/top', function (data) {
 
             for (var i = 0; i < 20; i++) {
-                document.getElementById('world'+ i.toString()).innerHTML = (data[i][0]);
-                document.getElementById('world_a' + i.toString()).href = (data[i][1]);
+                document.getElementById('0').innerHTML = data[0]['articles'][i]['title'];
+
             }
         });
 
